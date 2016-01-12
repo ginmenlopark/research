@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\textbf{Confidence Intervals.} 
+
+Refer to Hogg and Tanis, 2nd Ed., Chapter 6 for most of these results.
+
+Let $X \sim \mbox{N}(\mu_x, \sigma^{2}_x)$ , with $n$ samples; and let $Y \sim \mbox{N}(\mu_y, \sigma^{2}_y)$, with $m$ samples.
+Then $W = X - Y \sim \mbox{N}(\mu_x - \mu_y, \frac{\sigma^{2}_x}{n}+\frac{\sigma^{2}_y}{m})$.
+
+To figure out confidence intervals, solve for $\mu_x-\mu_y$ here:
+$$P (-z_{\alpha/2} \leq \frac{(X-Y)-(\mu_x-\mu_y)}{\sqrt{ \frac{\sigma^{2}_x}{n} + \frac{\sigma^{2}_y}{m} } }\leq z_{\alpha/2} ) = 1 - \alpha $$
+
+After we let $\sigma_W = \sqrt{ \frac{\sigma^{2}_x}{n} + \frac{\sigma^{2}_y}{m} }$, we get the confidence intervals for our point estimator of $X-Y$ to be: $\bar{X}-\bar{Y} \pm z_{\alpha/2}\sigma_W$
+
+For experimental data, usually we don't know $\sigma^2$ in advance for any of our random variables, so we need to use a quantity like the MMSE variance estimator $S$ instead.  Then if we substitute $S_x$ and $S_y$ into the derivation above, we no longer have clean Gaussian random variables, but rather Student's t random variables.  After constructing $T = X - Y$, we have $T \sim t(n+m-2)$.  The derivation concludes with 100$(1-\alpha)\%$ confidence intervals for $T$ being:
+$$S^{2}_{x} = \frac{1}{n-1}\sum^{n}_{i=1} (x_i - \bar{x}) $$
+$$S_p = \sqrt{ \frac{(n-1) S^{2}_x + (m-1) S^{2}_y }{n+m-2}  }$$
+$$\bar{X}-\bar{Y} \pm S_p \sqrt{ \frac{1}{n} + \frac{1}{m}}$$
+
+
+\begin{figure}[h]
+ \begin{center}
+<<echo=FALSE, fig=TRUE>>=
+library(ggplot2)
+library(gcookbook)
+clim <- subset(climate,Source=="Berkeley", select=c("Year","Anomaly10y","Unc10y"))
+ggplot(clim, aes(x=Year, y=Anomaly10y))+
+  geom_ribbon(aes(ymin=Anomaly10y-Unc10y, ymax=Anomaly10y+Unc10y), alpha=0.2) + geom_line()
+@
+  \caption{Two }
+ \end{center}
+\end{figure}
+
+
+\end{document}
